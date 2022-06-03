@@ -1,7 +1,7 @@
 apiVersion: v1
 kind: PersistentVolume
 metadata:
-  name: pv-nfs-data
+  name: prometheus-pv-nfs-data
   namespace: monitoring
   labels:
     type: nfs

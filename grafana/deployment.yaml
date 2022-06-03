@@ -29,7 +29,7 @@ spec:
       volumes:
         - name: grafana-storage
           persistentVolumeClaim:
-            claimName: pvc-nfs-storage
+            claimName: grafana-pvc-nfs-storage
         - name: grafana-datasources
           configMap:
               defaultMode: 420

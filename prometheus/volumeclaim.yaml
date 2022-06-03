@@ -1,7 +1,7 @@
 apiVersion: v1
 kind: PersistentVolumeClaim
 metadata:
-  name: pvc-nfs-data
+  name: prometheus-pvc-nfs-data
   namespace: monitoring
   labels:
     app: prometheus-deployment
