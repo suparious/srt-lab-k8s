@@ -1,9 +1,9 @@
 apiVersion: v1
 kind: PersistentVolumeClaim
 metadata:
-  name: jenkins-pvc-nfs-storage
+  name: postgres-pvc-nfs-storage
   labels:
-    app: jenkins
+    app: postgres
 spec:
   storageClassName: managed-nfs
   accessModes:
