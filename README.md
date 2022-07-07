@@ -1,4 +1,4 @@
-# SRT Labs Environemnt
+# SRT Lab Environment
 
 This repo contains the live configuration of the SRT lab environment.
 
