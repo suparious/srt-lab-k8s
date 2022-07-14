@@ -5,6 +5,7 @@ metadata:
   namespace: argocd
   annotations:
     kubernetes.io/ingress.class: "nginx"
+    nginx.ingress.kubernetes.io/force-ssl-redirect: "true"
     nginx.ingress.kubernetes.io/backend-protocol: "HTTP"
 spec:
   rules:
@@ -16,8 +17,12 @@ spec:
             name: argocd-server
             port:
               number: 80
-         pathType: Exact
+         pathType: Prefix
          path: /
+  tls:
+  - hosts:
+    - argocd.eks.solidrust.net
+    secretName: star.eks.solidrust.net-tls
 ---
 apiVersion: networking.k8s.io/v1
 kind: Ingress
@@ -39,4 +44,7 @@ spec:
               number: 443
          pathType: Exact
          path: /
-    
+  tls:
+  - hosts:
+    - argocd-grpc.eks.solidrust.net
+    secretName: star.eks.solidrust.net-tls
