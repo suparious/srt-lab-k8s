@@ -1,0 +1,53 @@
+http://10.10.0.1:5240/MAAS
+sxUPSF7XD24WnHWNB8:A3EAWVxq9r2MndE4AX:2L968PHQtHHEu5UL4nSamaD8PF3czb37
+
+echo "net.ipv4.ip_nonlocal_bind=1" | sudo tee -a /etc/sysctl.conf
+sudo sysctl -p
+sudo apt-get install -y net-tools haproxy keepalived nginx
+
+
+/etc/keepalived/keepalived.conf:
+
+vrrp_instance VI_1 {
+    interface eno1
+    state MASTER
+    virtual_router_id 150
+    priority 101
+    advert_int 2
+    unicast_src_ip 10.10.0.60 #IP of this device
+    unicast_peer{
+        10.10.0.55 #IP of peer device
+        10.10.0.58 #IP of peer device
+    }
+    authentication {
+        auth_type AH
+        auth_pass assmonkey
+    }
+    virtual_ipaddress {
+        10.10.10.10 dev eno1 label eno1:vip
+    }
+}
+
+sudo service keepalived start
+sudo systemctl status keepalived
+
+/etc/nginx/sites-enabled/default:
+
+
+/etc/haproxy/haproxy.cfg:
+
+frontend panzer.solidrust.net
+    bind 10.10.10.10:80
+    #bind 10.0.0.3:443 ssl crt /etc/ssl/certs/mysite.pem
+    #http-request redirect scheme https unless { ssl_fc }
+    #use_backend api_servers if { path_beg /api/ }
+    default_backend web_servers
+
+backend web_servers
+    balance roundrobin
+    cookie SERVERUSED insert indirect nocache
+    option httpchk HEAD /
+    default-server check maxconn 200
+    server lab1 10.10.0.60:80 cookie lab1
+    server lab2 10.10.0.55:80 cookie lab2
+    server lab3 10.10.0.55:80 cookie lab3
